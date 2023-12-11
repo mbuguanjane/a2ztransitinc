@@ -1,9 +1,9 @@
-import 'package:a2ztransitinc/model/loginuser.dart';
-import 'package:a2ztransitinc/model/task.dart';
-import 'package:a2ztransitinc/model/usermodel.dart';
-import 'package:a2ztransitinc/screens/assignUser.dart';
-import 'package:a2ztransitinc/screens/home.dart';
-import 'package:a2ztransitinc/screens/userhome.dart';
+import 'package:transportapp/model/loginuser.dart';
+import 'package:transportapp/model/task.dart';
+import 'package:transportapp/model/usermodel.dart';
+import 'package:transportapp/screens/assignUser.dart';
+import 'package:transportapp/screens/home.dart';
+import 'package:transportapp/screens/userhome.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -543,29 +543,7 @@ class _TaskScreenState extends State<TaskScreen> with WidgetsBindingObserver {
         });
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-
-    // These are the callbacks
-    switch (state) {
-      case AppLifecycleState.resumed:
-        // widget is resumed
-        print("widget resumed");
-        break;
-      case AppLifecycleState.inactive:
-        // widget is inactive
-        print("widget Incactive");
-        break;
-      case AppLifecycleState.paused:
-        // widget is paused
-        break;
-      case AppLifecycleState.detached:
-        // widget is detached
-        print("widget detached");
-        break;
-    }
-  }
+  
 
   @override
   void initState() {
