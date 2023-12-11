@@ -4,6 +4,10 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library for profile picture</string>
+    <key>aps-environment</key>
+    <string>development</string>
 	<key>CFBundleDisplayName</key>
 	<string>A2ztransitinc</string>
 	<key>CFBundleExecutable</key>
