@@ -28,36 +28,8 @@ class _UserScreenState extends State<UserScreen> {
   List listItem = ["Admin", "User"];
   final List<UserModel> _userList = <UserModel>[];
 
-  Future<List<UserModel>?> getUsers() async {
-    var url = Uri.https('driverapi.sokoyoyacomrade.com', '/api/users');
-    var response = await http.get(url, headers: {
-      //'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ${loginUser!.token}',
-    }
-        // body: {'email': 'mbuguanjane@gmail.com', 'password': '12345678'}
-        );
-
-    if (response.statusCode == 200) {
-      // print('Response status: ${response.statusCode}');
-      // print('Response body: ${response.body}');
-      //userList = json.decode(response.body);
-      var parsed = json.decode(response.body);
-      // print(parsed);
-
-      List<UserModel> userList = <UserModel>[];
-      for (var item in parsed) {
-        // print(item['Firstname']);
-        userList.add(UserModel.fromJson(item));
-      }
-      // print(userList.length);
-      // print("--------------------");
-      return userList;
-    } else {
-      // print("Failed to Send");
-    }
-    return null;
-  }
+  
+  
 
   Future<String> loadAsset(String path) async {
     return await rootBundle.loadString(path);
@@ -246,10 +218,11 @@ class _UserScreenState extends State<UserScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          _userList.clear();
+                          
                           createUser(context);
                           getUsers().then((value) => {
                                 setState(() {
+                                   _userList.clear();
                                   _userList.addAll(value!);
                                 })
                               });
@@ -282,9 +255,9 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   bool emailempty = false, passwordempty = false, namempty = false;
-  TextEditingController namecontroller =  TextEditingController();
-  TextEditingController emailcontroller =  TextEditingController();
-  TextEditingController passwordcontroller =  TextEditingController();
+  TextEditingController namecontroller = TextEditingController();
+  TextEditingController emailcontroller = TextEditingController();
+  TextEditingController passwordcontroller = TextEditingController();
   Future createUser(context) async {
     if (emailcontroller.text.isNotEmpty &&
         passwordcontroller.text.isNotEmpty &&
@@ -366,7 +339,113 @@ class _UserScreenState extends State<UserScreen> {
           textColor: Colors.white);
     }
   }
+   
+   Offset _getTapPosition(BuildContext context) {
+    // You can replace this with your logic to get the tap position
+    return const Offset(100.0, 100.0);
+  }
+   
+_showPopupMenu(context,Offset offset, int userid) async {
+    double left = offset.dx;
+    double top = offset.dy;
+    final result=await showMenu(
+    context: context,
+    position: RelativeRect.fromLTRB(left, top, 0, 0),
+    items: [
+        const PopupMenuItem<String>(
+          value: 'Update',
+          child: Text('Update')),
+      const PopupMenuItem<String>(
+          value: 'Delete',
+          child: Text('Delete')),
+      ],
+    elevation: 8.0,
+  );
 
+  switch(result){
+    case 'Update':
+     showDataAlert(context);
+    break;
+     case 'Delete':
+    
+    deleteUser(userid);
+    
+    break;
+  }
+}
+
+Future deleteUser(userid) async {
+    var url = Uri.https('driverapi.sokoyoyacomrade.com', '/api/delete/${userid}');
+    var response = await http.get(url, headers: {
+      //'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${loginUser!.token}',
+    }
+        // body: {'email': 'mbuguanjane@gmail.com', 'password': '12345678'}
+        );
+
+    if (response.statusCode == 200) {
+      // print('Response status: ${response.statusCode}');
+      // print('Response body: ${response.body}');
+      //userList = json.decode(response.body);
+      var parsed = json.decode(response.body);
+      
+       getUsers().then((value) => {
+                      setState(() {
+                        _userList.clear();
+                        _userList.addAll(value!);
+                      })
+                    });
+       
+        Fluttertoast.showToast(
+            msg: "deleted successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM, // Also possible "TOP" and "CENTER"
+            backgroundColor: Colors.grey,
+            textColor: Colors.white);
+       
+     
+    } else {
+       Fluttertoast.showToast(
+            msg: "Failed to delete",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM, // Also possible "TOP" and "CENTER"
+            backgroundColor: Colors.grey,
+            textColor: Colors.white);
+    }
+   
+  }
+  Future<List<UserModel>?> getUsers() async {
+    var url = Uri.https('driverapi.sokoyoyacomrade.com', '/api/users');
+    var response = await http.get(url, headers: {
+      //'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${loginUser!.token}',
+    }
+        // body: {'email': 'mbuguanjane@gmail.com', 'password': '12345678'}
+        );
+
+    if (response.statusCode == 200) {
+      // print('Response status: ${response.statusCode}');
+      // print('Response body: ${response.body}');
+      //userList = json.decode(response.body);
+      var parsed = json.decode(response.body);
+      // print(parsed);
+     
+      List<UserModel> userList = <UserModel>[];
+      userList.clear();
+      for (var item in parsed) {
+        // print(item['Firstname']);
+        userList.add(UserModel.fromJson(item));
+      }
+      // print(userList.length);
+      // print("--------------------");
+      return userList;
+    } else {
+      // print("Failed to Send");
+    }
+    return null;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -384,9 +463,21 @@ class _UserScreenState extends State<UserScreen> {
               leading: Text(_userList[index].UserType),
               title: Text(_userList[index].name),
               subtitle: Text(_userList[index].email),
+              trailing: GestureDetector(
+                onTapDown: (TapDownDetails details) {
+                   setState(() {
+                         _showPopupMenu(context,details.globalPosition,_userList[index].id);
+                   });
+                 
+                                 
+
+                },
+                child: Container(child: const Icon(Icons.more)),
+              ),
             );
           },
-          separatorBuilder: (context, index) => const Divider(color: Colors.black),
+          separatorBuilder: (context, index) =>
+              const Divider(color: Colors.black),
           itemCount: _userList.length),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
@@ -438,3 +529,6 @@ class _UserScreenState extends State<UserScreen> {
     );
   }
 }
+
+
+

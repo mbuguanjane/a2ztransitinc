@@ -360,6 +360,7 @@ class _TaskScreenState extends State<TaskScreen> with WidgetsBindingObserver {
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
                         controller: Tripid,
+                        keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: 'Enter Trip id',
@@ -679,7 +680,15 @@ class _TaskScreenState extends State<TaskScreen> with WidgetsBindingObserver {
                                         MaterialPageRoute(
                                             builder: (context) => AssignUser(
                                                   data: _taskList[index].id,
-                                                )));
+                                                ))).then((value) {
+                                               getTasks().then((value) => {
+                                                  setState(() {
+                                                    _taskList.clear();
+                                                    _taskList.addAll(value!);
+                                                  })
+                                                });
+                                            print("on resume");
+                                      });
                                   }
                                 : () {
                                     viewUser(context, _taskList[index].userid);

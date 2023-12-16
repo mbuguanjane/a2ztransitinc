@@ -115,7 +115,17 @@ class _UserChatListState extends State<UserChatList> {
                           MaterialPageRoute(
                               builder: (context) => UserChatDetail(
                                     userReceiver: _userList[index],
-                                  )));
+                                  )))
+
+                                  .then((value) {
+                                       getUsers().then((value) => {
+                                        setState(() {
+                                          _userList.clear();
+                                          _userList.addAll(value!);
+                                        })
+                                      });
+                                    print("on resume");
+                              });
                     }
                   : null,
               leading: CircleAvatar(

@@ -94,53 +94,63 @@ class _ChatScreenState extends State<ChatScreen> {
         });
     super.initState();
   }
+ 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Users",
-          style: TextStyle(color: Colors.white),
+    return  Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "Users",
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.blue,
         ),
-        backgroundColor: Colors.blue,
-      ),
-      body: ListView.separated(
-          itemBuilder: (context, index) {
-            return ListTile(
-              onTap: _userList[index].id != loginUser!.userid
-                  ? () {
-                      updateChat(_userList[index].id);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ChatDetail(
-                                    userReceiver: _userList[index],
-                                  )));
-                    }
-                  : null,
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://randomuser.me/api/portraits/men/${_userList[index].id}.jpg"),
-                maxRadius: 20,
-              ),
-              title: Text(_userList[index].name),
-              subtitle: const Text("Hello"),
-              trailing: _userList[index].messageStatus == "unseen"
-                  ? const Column(
-                      children: [
-                        Text("New message"),
-                        Icon(
-                          Icons.message_rounded,
-                          color: Colors.blue,
-                        )
-                      ],
-                    )
-                  : null,
-            );
-          },
-          separatorBuilder: (context, index) => const Divider(color: Colors.blue),
-          itemCount: _userList.length),
-    );
+        body: ListView.separated(
+            itemBuilder: (context, index) {
+              return ListTile(
+                onTap: _userList[index].id != loginUser!.userid
+                    ? () {
+                        updateChat(_userList[index].id);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChatDetail(
+                                      userReceiver: _userList[index],
+                                    ))).then((value) {
+                                       getUsers().then((value) => {
+                                        setState(() {
+                                          _userList.clear();
+                                          _userList.addAll(value!);
+                                        })
+                                      });
+                                print("on resume");
+                              });
+                      }
+                    : null,
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      "https://randomuser.me/api/portraits/men/${_userList[index].id}.jpg"),
+                  maxRadius: 20,
+                ),
+                title: Text(_userList[index].name),
+                subtitle: const Text("Hello"),
+                trailing: _userList[index].messageStatus == "unseen"
+                    ? const Column(
+                        children: [
+                          Text("New message"),
+                          Icon(
+                            Icons.message_rounded,
+                            color: Colors.blue,
+                          )
+                        ],
+                      )
+                    : null,
+              );
+            },
+            separatorBuilder: (context, index) => const Divider(color: Colors.blue),
+            itemCount: _userList.length),
+      );
+    
   }
 }

@@ -144,7 +144,7 @@ class _UserTasksState extends State<UserTasks> {
 
             return SizedBox(
               width: double.infinity,
-              height: 250,
+              height: 400,
               child: Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
