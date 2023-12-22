@@ -106,6 +106,8 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   showDataAlert(context) {
+    // ignore: unnecessary_null_comparison
+   
     showDialog(
         context: context,
         builder: (context) {
@@ -345,16 +347,16 @@ class _UserScreenState extends State<UserScreen> {
     return const Offset(100.0, 100.0);
   }
    
-_showPopupMenu(context,Offset offset, int userid) async {
+_showPopupMenu(context,Offset offset, UserModel userList, ) async {
     double left = offset.dx;
     double top = offset.dy;
     final result=await showMenu(
     context: context,
     position: RelativeRect.fromLTRB(left, top, 0, 0),
     items: [
-        const PopupMenuItem<String>(
-          value: 'Update',
-          child: Text('Update')),
+        // const PopupMenuItem<String>(
+        //   value: 'Update',
+        //   child: Text('Update')),
       const PopupMenuItem<String>(
           value: 'Delete',
           child: Text('Delete')),
@@ -364,11 +366,11 @@ _showPopupMenu(context,Offset offset, int userid) async {
 
   switch(result){
     case 'Update':
-     showDataAlert(context);
+    //  showDataAlert(context,userList);
     break;
      case 'Delete':
     
-    deleteUser(userid);
+    deleteUser(userList.id);
     
     break;
   }
@@ -466,7 +468,7 @@ Future deleteUser(userid) async {
               trailing: GestureDetector(
                 onTapDown: (TapDownDetails details) {
                    setState(() {
-                         _showPopupMenu(context,details.globalPosition,_userList[index].id);
+                         _showPopupMenu(context,details.globalPosition,_userList[index]);
                    });
                  
                                  
@@ -516,7 +518,16 @@ Future deleteUser(userid) async {
               ),
               backgroundColor: Colors.blue,
               onTap: () {
+                
                 showDataAlert(context);
+                setState(() {
+                  getUsers().then((value) => {
+                      setState(() {
+                        _userList.clear();
+                        _userList.addAll(value!);
+                      })
+                    });
+                });
               },
               label: 'Create User',
               labelStyle: const TextStyle(

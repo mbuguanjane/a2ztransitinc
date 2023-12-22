@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="a2ztransitinc"
+        android:label="A2z Transit Inc"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

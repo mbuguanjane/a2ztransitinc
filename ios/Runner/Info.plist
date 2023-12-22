@@ -15,7 +15,7 @@
     <key>aps-environment</key>
     <string>development</string>
 	<key>CFBundleDisplayName</key>
-	<string>A2ztransitinc</string>
+	<string>A2z Transit Inc</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -23,7 +23,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>a2ztransitinc</string>
+	<string>A2z Transit Inc</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
