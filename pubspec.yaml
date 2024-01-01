@@ -49,7 +49,6 @@ dependencies:
   intl: ^0.18.1
   geocoding: ^2.1.0
   flutter_launcher_icons: "^0.13.1"
-  splashscreen:
   
 
 flutter_launcher_name:
